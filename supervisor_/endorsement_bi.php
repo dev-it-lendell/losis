@@ -202,7 +202,7 @@ toastr['danger']('Report sending error.');
                                   class="fa fa-check-circle-o"></i>&nbsp;Approve</button>
 
                               <button class="btn btn-outline-success" style="margin-left: 5px; margin-bottom: 10px;"
-                                @click="fetchApi('hired')"><i class="fa fa-refresh"></i> FETCH API DATA</button>
+                                @click="fetchApi('hired')"><i class="fa fa-refresh"></i> Fetch API Data</button>
 
                               <table
                                 class="table table-hover js-basic-example dataTable table-custom table-striped m-b-0 c_list">
@@ -1313,10 +1313,15 @@ toastr['danger']('Report sending error.');
       <q-card-section>
         <div class="row justify-between items-center" style="margin-right: 0 !important; margin-left: 0 !important;">
           <div class="text-h5">TALKPUSH DATA</div>
-          <div>
-            <button class="btn btn-danger text-center" color="red" v-close-popup>
+          <div class="qbtn-group">
+            <!-- <button class="btn btn-danger text-center" color="red" v-close-popup>
               CLOSE
-            </button>
+            </button> -->
+            <q-btn-group>
+              <q-btn label="ASSIGN" v-if="this.selected.length > 0" color="green" icon="fa fa-user-plus"
+                @click="openClientDialog()"></q-btn>
+              <q-btn label="CLOSE" color="red" icon="fa fa-times" v-close-popup></q-btn>
+            </q-btn-group>
           </div>
         </div>
       </q-card-section>
@@ -1335,8 +1340,8 @@ toastr['danger']('Report sending error.');
             <q-tab-panel v-for="status in this.candidateStatus.data" :key="status" :name="status.code" class="q-pa-none"
               style="max-height: 70vh !important">
               <q-table v-if="!this.bools.loading" class="scroll sticky-header-table" :rows="this.apiDetails.data"
-                :columns="this.columns" virtual-scroll row-key="id" v-model:pagination="this.pagination"
-                :filter="this.filter">
+                :columns="this.columns" virtual-scroll row-key="external_client_id" v-model:pagination="this.pagination"
+                :filter="this.filter" selection="multiple" v-model:selected="selected">
 
                 <template v-slot:top-right>
                   <q-input outlined dense debounce="300" input-class="text-green text-bold" v-model="this.filter" square
@@ -1363,6 +1368,33 @@ toastr['danger']('Report sending error.');
         <q-spinner-gears size="50px" color="green" />
 
       </q-inner-loading>
+    </q-card>
+  </q-dialog>
+
+  <q-dialog v-model="this.bools.clientDialog">
+    <q-card style="width: 35vw !important">
+      <q-card-section class="bg-green text-white text-h5" align="center">CLIENTS</q-card-section>
+      <q-form ref="clientForm" @submit="postCandidates()">
+        <q-card-section class="client-details">
+          <div class="row fit">
+            <div class="col-12">
+              <q-select class="full-width" stack-label square filled v-model="endorsementDetails.client_id"
+                :options="this.clientOptions.data" :rules="[(val) => !!val || 'Field is required']" emit-value
+                map-options label-slot dense class="accent-text-dark" color="green" options-dense hide-bottom-space>
+                <template v-slot:label>
+                  Client
+                  <span class="text-weight-bold text-red"> *</span>
+                </template>
+              </q-select>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-section align="right" class="bg-green" v-if="this.selected.length > 0">
+          <q-btn type="submit" :label="`ASSIGN ${this.selected.length} CANDIDATE(S)`" color="primary"
+            icon="fa fa-check">
+          </q-btn>
+        </q-card-section>
+      </q-form>
     </q-card>
   </q-dialog>
 </div>
@@ -1535,6 +1567,7 @@ const app = Vue.createApp({
       apiHost: "http://localhost:8888/api/",
       bools: {
         apiDialog: false,
+        clientDialog: false,
         loading: false,
       },
       pagination: {
@@ -1588,10 +1621,16 @@ const app = Vue.createApp({
         },
       ],
       filter: '',
+      clientOptions: [],
       apiDetails: [],
+      selected: [],
       requestOptions: {
         method: 'GET',
         redirect: 'follow'
+      },
+      endorsementDetails: {
+        client_id: '',
+        site_id: ''
       }
     }
   },
@@ -1615,8 +1654,19 @@ const app = Vue.createApp({
         }) // or update the DOM with result
         .catch(error => console.log('error', error));
     },
+    async fetchClients(client = 'concentrix') {
+      await fetch(`${this.apiHost}losis/clients?company_name=${client}`, this.requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          this.clientOptions = JSON.parse(result)
+        }) // or update the DOM with result
+        .catch(error => console.log('error', error));
+    },
     async fetchApi(candidateStatus) {
-      event.preventDefault();
+      this.selected = []
+      if (event !== undefined) {
+        event.preventDefault();
+      }
       this.bools.apiDialog = true
       this.bools.loading = true
 
@@ -1640,11 +1690,90 @@ const app = Vue.createApp({
       // BY STATUS //
 
       this.bools.loading = false
+    },
+
+    async postCandidates() {
+      await this.$refs.clientForm.validate().then(async (valid) => {
+        if (!valid) {
+          return false;
+        }
+
+        this.$q
+          .dialog({
+            title: "Confirmation",
+            message: `Are you sure you want to assign the Candidate(s)?`,
+            ok: {
+              push: true,
+            },
+            cancel: {
+              push: true,
+              color: "negative",
+            },
+          })
+          .onOk(async () => {
+            this.bools.loading = true
+            let payload = {}
+
+            let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value ===
+              this
+              .endorsementDetails.client_id)
+            if (filterClients.length > 0) {
+              this.endorsementDetails.site_id = filterClients[0].site_id
+
+              if (this.selected.length > 0) {
+                for (const list of this.selected) {
+                  list.client_id = this.endorsementDetails.client_id
+                  list.site_id = this.endorsementDetails.site_id
+                }
+
+                payload = this.selected
+              }
+            }
+
+            const url = `${this.apiHost}losis/candidates/endorsement`;
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+            }).then(response => response.json())
+
+
+            this.bools.clientDialog = false
+            if (response.status === 'success') {
+              await this.fetchApi(this.tab)
+              this.bools.loading = false
+
+              this.$q.notify({
+                progress: true,
+                type: 'positive',
+                message: 'SUCCESSFULLY ASSIGNED CANDIDATE(S)',
+              });
+            }
+          })
+
+      })
+    },
+    async openClientDialog() {
+      this.bools.clientDialog = true
+      await this.fetchClients()
     }
   }
 })
 
-app.use(Quasar)
+app.use(Quasar, {
+  config: {
+    brand: {
+      // ... or all other brand colors
+    },
+    notify: {}, // default set of options for Notify Quasar plugin
+    loading: {}, // default set of options for Loading Quasar plugin
+    loadingBar: {}, // settings for LoadingBar Quasar plugin
+    dialog: {}
+    // ..and many more
+  }
+})
 app.mount('#q-app')
 </script>
 
@@ -1665,6 +1794,51 @@ app.mount('#q-app')
   margin-right: 0 !important;
   /* Add your custom styles here */
 }
+
+.q-btn .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+.qbtn-group .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+.client-details .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+
+.q-dialog-plugin .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+.q-notifications .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+.q-btn .col {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+.client-details .col {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* Add your custom styles here */
+}
+
+
 
 .sticky-header-table {
   height: 70vh;
