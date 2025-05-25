@@ -6,7 +6,7 @@ include 'sidebar.php';
 if (!empty($_GET['sendfinrep'])) {
   switch ($_GET['sendfinrep']) {
     case 'succ':
-      ?>
+?>
 <script type="text/javascript">
 toastr.options.timeOut = "false";
 toastr.options.closeButton = true;
@@ -17,7 +17,7 @@ toastr['success']('Successfully sending of report.');
       break;
 
     case 'err':
-      ?>
+    ?>
 
 
 <script type="text/javascript">
@@ -30,7 +30,7 @@ toastr['danger']('Cannot send report.');
       break;
 
     default:
-      ?>
+    ?>
 <script type="text/javascript">
 toastr.options.timeOut = "false";
 toastr.options.closeButton = true;
@@ -202,7 +202,7 @@ toastr['danger']('Report sending error.');
                                   class="fa fa-check-circle-o"></i>&nbsp;Approve</button>
 
                               <button class="btn btn-outline-success" style="margin-left: 5px; margin-bottom: 10px;"
-                                @click="fetchApi('hired')"><i class="fa fa-refresh"></i> Sync</button>
+                                @click="fetchApi('hired')"><i class="fa fa-refresh"></i> FETCH API DATA</button>
 
                               <table
                                 class="table table-hover js-basic-example dataTable table-custom table-striped m-b-0 c_list">
@@ -249,7 +249,7 @@ toastr['danger']('Report sending error.');
                                         $endorerun = "";
                                       }
 
-                                      ?>
+                                  ?>
 
                                   <tr>
                                     <input type="hidden" id="endoCode_" name="endoCode_<?= $row['endo_code'] ?>"
@@ -390,15 +390,15 @@ toastr['danger']('Report sending error.');
                                                   ?>
                                                   <option> -- Select
                                                     Verifier -- </option>; <?php
-                                                    $res = $conn->query($sql);
-                                                    while ($row = mysqli_fetch_array($res)) {
-                                                      ?>
+                                                                            $res = $conn->query($sql);
+                                                                            while ($row = mysqli_fetch_array($res)) {
+                                                                            ?>
                                                   <option value="<?php echo $row['user_id']; ?>">
                                                     <?php echo $row['telefullname']; ?>
                                                   </option>
                                                   <?php
-                                                    }
-                                                    ?>
+                                                                            }
+                                                  ?>
                                                 </select>
                                               </div>
                                             </div>
@@ -460,7 +460,7 @@ toastr['danger']('Report sending error.');
                                                     $opsanalystname = $row2['opsanalystname'];
                                                   }
 
-                                                  ?>
+                                              ?>
                                               <tr>
                                                 <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
                                                   value="<?= $row['endorsementcode'] ?>">
@@ -589,15 +589,15 @@ toastr['danger']('Report sending error.');
                                                   ?>
                                                   <option> -- Select
                                                     Verifier -- </option>; <?php
-                                                    $res = $conn->query($sql);
-                                                    while ($row = mysqli_fetch_array($res)) {
-                                                      ?>
+                                                                            $res = $conn->query($sql);
+                                                                            while ($row = mysqli_fetch_array($res)) {
+                                                                            ?>
                                                   <option value="<?php echo $row['user_id']; ?>">
                                                     <?php echo $row['telefullname']; ?>
                                                   </option>
                                                   <?php
-                                                    }
-                                                    ?>
+                                                                            }
+                                                  ?>
                                                 </select>
                                               </div>
                                             </div>
@@ -658,7 +658,7 @@ toastr['danger']('Report sending error.');
                                                     $opsanalystname = $row2['opsanalystname'];
                                                   }
 
-                                                  ?>
+                                              ?>
                                               <tr>
                                                 <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
                                                   value="<?= $row['endorsementcode'] ?>">
@@ -813,7 +813,7 @@ toastr['danger']('Report sending error.');
                                                 $endoimportant = '<div class="feeds-left"><img src="../images/icons/low_imp.png" class="rounded-circle width35" alt="" style="width: 20px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Low Importance"></div>';
                                               }
 
-                                              ?>
+                                          ?>
                                           <tr>
                                             <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
                                               value="<?= $row['endo_code'] ?>">
@@ -900,12 +900,12 @@ toastr['danger']('Report sending error.');
                                               $datetime_returned = $row['datetime_returned'];
                                               $newDateTimeReturned = date('F d, Y - g:i A', strtotime($datetime_returned));
 
-                                              ?>
+                                          ?>
                                           <tr>
                                             <td>
                                               <?php
                                                   echo '<div class="feeds-left"><img src="../profilepictures_/' . $operationsid . '/' . $user_image . '" class="rounded-circle width35" alt="" style="width: 35px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="' . $operationsname . '"></div>'
-                                                    ?>
+                                                  ?>
                                             </td>
                                             <td><?php echo $row['endo_code']; ?></td>
                                             <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
@@ -1003,7 +1003,7 @@ toastr['danger']('Report sending error.');
                                     $opsanalystname = $row2['opsanalystname'];
                                     $opsanalystid = $row2['opsanalystid'];
 
-                                    ?>
+                                ?>
                                 <tr>
                                   <td><?php echo $endoimportant; ?></td>
                                   <td><?php echo $row['endo_code']; ?></td>
@@ -1171,7 +1171,7 @@ toastr['danger']('Report sending error.');
                                                 $endoimportant = '<div class="feeds-left"><img src="../images/icons/low_imp.png" class="rounded-circle width35" alt="" style="width: 20px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Low Importance"></div>';
                                               }
 
-                                              ?>
+                                          ?>
                                           <tr>
                                             <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
                                               value="<?= $row['endo_code'] ?>">
@@ -1262,12 +1262,12 @@ toastr['danger']('Report sending error.');
                                               $datetime_returned = $row['datetime_returned'];
                                               $newDateTimeReturned = date('F d, Y - g:i A', strtotime($datetime_returned));
 
-                                              ?>
+                                          ?>
                                           <tr>
                                             <td>
                                               <?php
                                                   echo '<div class="feeds-left"><img src="../profilepictures_/' . $operationsid . '/' . $user_image . '" class="rounded-circle width35" alt="" style="width: 35px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="' . $operationsname . '"></div>'
-                                                    ?>
+                                                  ?>
                                             </td>
                                             <td><?php echo $row['endo_code']; ?></td>
                                             <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
@@ -1563,6 +1563,13 @@ const app = Vue.createApp({
           align: "center",
           label: "ENDORSEMENT",
           field: "endo_desc",
+          sortable: true
+        },
+        {
+          name: "endo_requestor",
+          align: "center",
+          label: "REQUEST BY",
+          field: "endo_requestor",
           sortable: true
         },
         {
