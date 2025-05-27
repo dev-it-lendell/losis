@@ -1622,6 +1622,7 @@ const app = Vue.createApp({
       ],
       filter: '',
       clientOptions: [],
+      supervisorOptions: [],
       apiDetails: [],
       selected: [],
       requestOptions: {
@@ -1630,12 +1631,14 @@ const app = Vue.createApp({
       },
       endorsementDetails: {
         client_id: '',
-        site_id: ''
+        site_id: '',
+        team_id: '',
       }
     }
   },
   created() {
     this.fetchCandidateStatus()
+    this.fetchSupervisors()
   },
   // mounted() {
   //   this.bools.apiDialog = true
@@ -1659,6 +1662,14 @@ const app = Vue.createApp({
         .then(response => response.text())
         .then(result => {
           this.clientOptions = JSON.parse(result)
+        }) // or update the DOM with result
+        .catch(error => console.log('error', error));
+    },
+    async fetchSupervisors(clientId) {
+      await fetch(`${this.apiHost}losis/clients/supervisor`, this.requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          this.supervisorOptions = JSON.parse(result)
         }) // or update the DOM with result
         .catch(error => console.log('error', error));
     },
@@ -1698,6 +1709,16 @@ const app = Vue.createApp({
           return false;
         }
 
+        if (this.supervisorOptions.data.length === 0) {
+          await this.fetchSupervisors()
+        }
+        
+        let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value === this.endorsementDetails.client_id)
+        let filterSupervisor = []
+        if (filterClients.length > 0) {
+           filterSupervisor = this.supervisorOptions.data.filter((filterSupervisor) => filterSupervisor.supervisor_id === filterClients[0].supervisor_)
+        }
+
         this.$q
           .dialog({
             title: "Confirmation",
@@ -1713,17 +1734,19 @@ const app = Vue.createApp({
           .onOk(async () => {
             this.bools.loading = true
             let payload = {}
-
-            let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value ===
-              this
-              .endorsementDetails.client_id)
+            
             if (filterClients.length > 0) {
               this.endorsementDetails.site_id = filterClients[0].site_id
+              this.endorsementDetails.team_id = filterClients[0].team_
+
 
               if (this.selected.length > 0) {
                 for (const list of this.selected) {
                   list.client_id = this.endorsementDetails.client_id
                   list.site_id = this.endorsementDetails.site_id
+                  list.team_id = this.endorsementDetails.team_id
+                  list.supervisor_id = filterSupervisor[0].supervisor_id,
+                  list.user_supervisor_id = filterSupervisor[0].user_id
                 }
 
                 payload = this.selected
@@ -1750,6 +1773,10 @@ const app = Vue.createApp({
                 type: 'positive',
                 message: 'SUCCESSFULLY ASSIGNED CANDIDATE(S)',
               });
+              this.bools.apiDialog = false
+              setTimeout(() => {
+                window.location.reload()
+              }, 500);
             }
           })
 
