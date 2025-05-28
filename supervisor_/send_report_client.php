@@ -3,7 +3,7 @@
     include 'header.php';
     include 'sidebar.php';
 
-    $sql1 = "SELECT a.id, a.endo_id, a.endo_desc, a.endo_code, CONCAT(a.fname, ' ', a.mname, ' ', a.lname, ' ', a.suffix) AS applicantname, a.birthdate, a.endo_date, a.endo_status, a.is_for_review, a.is_done, a.folder_name,  a.document_status_others, a.remarks_others, a.document_status_employment, a.remarks_employment, a.document_status_education, a.remarks_education, a.endorsed_to, a.turn_around_date, a.endo_services, a.package_desc, a.client_id, a.site_id, a.endo_requestor, a.change_package, a.importance, a.bi_id, a.closure_date, a.account, a.initiation_date, b.endo_code, b.assigned_by, b.assigned_supervisor, b.assigned_to, b.is_distributed, b.is_returned, c.client_id, c.client_name, c.acronym_, c.site_, d.user_id, CONCAT(d.user_id) AS clientid, CONCAT(d.fname, ' ', d.mname,  ' ', d.lname, ' ', d.suffix) AS clientname, d.site_id, d.company_name, e.user_id, CONCAT(e.user_id) AS supervisorid, CONCAT(e.fname, ' ', e.mname, ' ', e.lname, ' ', e.suffix) AS supervisorname, f.user_id, CONCAT(f.fname, ' ', f.mname, ' ', f.lname, ' ', f.suffix) AS operationsname, g.user_id ,g.useremail_ FROM tbl_endo AS a LEFT JOIN tbl_bi_assigned_supervisor AS b ON a.endo_code = b.endo_code LEFT JOIN client_list AS c ON a.site_id = c.client_id LEFT JOIN tbl_client AS d ON a.client_id = d.user_id LEFT JOIN tbl_supervisor AS e ON a.endorsed_to = e.user_id LEFT JOIN tbl_operations AS f ON b.assigned_by = f.user_id LEFT JOIN tbl_users AS g ON d.user_id = g.user_id WHERE a.endo_id = '".$_GET["id"]."'";
+    $sql1 = "SELECT a.id, a.endo_id, a.endo_desc, a.endo_code, CONCAT(a.fname, ' ', a.mname, ' ', a.lname, ' ', a.suffix) AS applicantname, a.birthdate, a.endo_date, a.endo_status, a.is_for_review, a.is_done, a.folder_name,  a.document_status_others, a.remarks_others, a.document_status_employment, a.remarks_employment, a.document_status_education, a.remarks_education, a.endorsed_to, a.turn_around_date, a.endo_services, a.package_desc, a.client_id, a.site_id, a.endo_requestor, a.change_package, a.importance, a.bi_id, a.closure_date, a.account, a.initiation_date, b.endo_code, b.assigned_by, b.assigned_supervisor, b.assigned_to, b.is_distributed, b.is_returned, c.client_id, c.client_name, c.acronym_, c.site_, d.user_id, CONCAT(d.user_id) AS clientid, CONCAT(d.fname, ' ', d.mname,  ' ', d.lname, ' ', d.suffix) AS clientname, d.site_id, d.company_name, e.user_id, CONCAT(e.user_id) AS supervisorid, CONCAT(e.fname, ' ', e.mname, ' ', e.lname, ' ', e.suffix) AS supervisorname, f.user_id, CONCAT(f.fname, ' ', f.mname, ' ', f.lname, ' ', f.suffix) AS operationsname, g.user_id ,g.useremail_, a.external_client_id FROM tbl_endo AS a LEFT JOIN tbl_bi_assigned_supervisor AS b ON a.endo_code = b.endo_code LEFT JOIN client_list AS c ON a.site_id = c.client_id LEFT JOIN tbl_client AS d ON a.client_id = d.user_id LEFT JOIN tbl_supervisor AS e ON a.endorsed_to = e.user_id LEFT JOIN tbl_operations AS f ON b.assigned_by = f.user_id LEFT JOIN tbl_users AS g ON d.user_id = g.user_id WHERE a.endo_id = '".$_GET["id"]."'";
     $query = $conn->query($sql1);
     while ($row = mysqli_fetch_array($query)) {
         extract($row);
@@ -22,9 +22,10 @@
         $clientfullname = $row['company_name'].' - '.$row['site_'];
         $clientname = $row['clientname'];
         $folder_name = $row['folder_name'];
-		$endo_services = $row['endo_services'];
-		$endo_status = $row['endo_status'];
-		$clientemail = $row['useremail_'];
+				$endo_services = $row['endo_services'];
+				$endo_status = $row['endo_status'];
+				$clientemail = $row['useremail_'];
+				$external_client_id = $row['external_client_id'];
     }
 ?>        
 
@@ -69,7 +70,8 @@
 								</div>
 							</div>
 						</div>
-						<form class="form" method="POST" enctype="multipart/form-data" action="functions/save_client_report.php">
+						<!-- action="functions/save_client_report.php" -->
+						<form class="form" method="POST" id="reportSending" enctype="multipart/form-data" >
 							<div class="body">
 								<div id="wrapper" class="theme-green">
 									<div class="row clearfix">
@@ -214,3 +216,40 @@
     include 'modals.php';
     include 'script.php';
 ?>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('reportSending');
+    const invitationId = '<?php echo $external_client_id; ?>'; // Make dynamic if needed
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // prevent page reload
+
+      const formData = new FormData(form);
+	  	const value = document.getElementById('reporttype').value;
+
+			if (Number(value) === 1) { // Send report if complete only
+				alert('<?php echo $external_client_id; ?>');
+				try {
+					const response = await fetch(`http://localhost:8888/api/losis/candidates/send-report/${invitationId}`, {
+						method: 'POST',
+						body: formData,
+					});
+
+					const result = await response.json();
+					console.log(result)
+					if (!response.ok) throw result;
+
+					alert('Upload successful!');
+					console.log('Server response:', result);
+				} catch (error) {
+					console.error('Upload failed:', error);
+					alert('Upload failed.');
+				}
+			} else {
+				alert('partial')
+			}
+    });
+  });
+</script>

@@ -8,7 +8,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "D@t@b@s3";
-    $dbname = "lendellp_losis_test";
+    $dbname = "lendellp_losis_test_new";
     $conn = mysqli_connect($servername, $username, $password, $dbname);
     
     // $servername = "localhost";
