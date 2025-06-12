@@ -1024,7 +1024,9 @@ toastr['danger']('Report sending error.');
                                     <a href="bi_view_report.php?endoCode=<?php echo $row['endo_code'] ?>"
                                       class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top"
                                       title="View Report"><i class="fa fa-folder-o"></i></a>
-                                    <!--<a href="generate_bi_report.php?file=<?php echo $row['endo_code'] ?>" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>-->
+                                    <a href="generate_bi_report.php?file=<?php echo $row['endo_code'] ?>"
+                                      class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                      data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>
                                     <a href="download_file.php?file=<?php echo $row['endo_code'] ?>"
                                       class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
                                       data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>
@@ -1712,11 +1714,13 @@ const app = Vue.createApp({
         if (this.supervisorOptions.data.length === 0) {
           await this.fetchSupervisors()
         }
-        
-        let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value === this.endorsementDetails.client_id)
+
+        let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value === this
+          .endorsementDetails.client_id)
         let filterSupervisor = []
         if (filterClients.length > 0) {
-           filterSupervisor = this.supervisorOptions.data.filter((filterSupervisor) => filterSupervisor.supervisor_id === filterClients[0].supervisor_)
+          filterSupervisor = this.supervisorOptions.data.filter((filterSupervisor) => filterSupervisor
+            .supervisor_id === filterClients[0].supervisor_)
         }
 
         this.$q
@@ -1734,7 +1738,7 @@ const app = Vue.createApp({
           .onOk(async () => {
             this.bools.loading = true
             let payload = {}
-            
+
             if (filterClients.length > 0) {
               this.endorsementDetails.site_id = filterClients[0].site_id
               this.endorsementDetails.team_id = filterClients[0].team_
@@ -1746,7 +1750,7 @@ const app = Vue.createApp({
                   list.site_id = this.endorsementDetails.site_id
                   list.team_id = this.endorsementDetails.team_id
                   list.supervisor_id = filterSupervisor[0].supervisor_id,
-                  list.user_supervisor_id = filterSupervisor[0].user_id
+                    list.user_supervisor_id = filterSupervisor[0].user_id
                 }
 
                 payload = this.selected
