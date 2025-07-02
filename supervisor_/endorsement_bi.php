@@ -6,38 +6,38 @@ include 'sidebar.php';
 if (!empty($_GET['sendfinrep'])) {
   switch ($_GET['sendfinrep']) {
     case 'succ':
-?>
-<script type="text/javascript">
-toastr.options.timeOut = "false";
-toastr.options.closeButton = true;
-toastr.options.positionClass = 'toast-bottom-right';
-toastr['success']('Successfully sending of report.');
-</script>
-<?php
+      ?>
+      <script type="text/javascript">
+        toastr.options.timeOut = "false";
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr['success']('Successfully sending of report.');
+      </script>
+      <?php
       break;
 
     case 'err':
-    ?>
+      ?>
 
 
-<script type="text/javascript">
-toastr.options.timeOut = "false";
-toastr.options.closeButton = true;
-toastr.options.positionClass = 'toast-bottom-right';
-toastr['danger']('Cannot send report.');
-</script>
-<?php
+      <script type="text/javascript">
+        toastr.options.timeOut = "false";
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr['danger']('Cannot send report.');
+      </script>
+      <?php
       break;
 
     default:
-    ?>
-<script type="text/javascript">
-toastr.options.timeOut = "false";
-toastr.options.closeButton = true;
-toastr.options.positionClass = 'toast-bottom-right';
-toastr['danger']('Report sending error.');
-</script>
-<?php
+      ?>
+      <script type="text/javascript">
+        toastr.options.timeOut = "false";
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr['danger']('Report sending error.');
+      </script>
+      <?php
       break;
   }
 }
@@ -223,7 +223,7 @@ toastr['danger']('Report sending error.');
                                 </thead>
                                 <tbody>
                                   <?php
-                                  $sql = "SELECT a.id, a.endo_id, a.endo_desc, a.endo_code, CONCAT(a.fname, ' ', a.mname, ' ', a.lname, ' ', a.suffix) AS applicantname, a.application_code, a.birthdate, a.endo_date, a.endo_status, a.is_for_review, a.is_done, a.is_rerun, a.folder_name,  a.document_status_others, a.remarks_others, a.document_status_employment, a.remarks_employment, a.document_status_education, a.remarks_education, a.endorsed_to, a.turn_around_date, a.endo_services, a.package_desc, a.client_id, a.site_id, a.endo_requestor, a.change_package, a.importance, a.bi_id, a.closure_date, a.account, a.initiation_date, b.user_id, CONCAT(b.user_id) AS clientuserid, CONCAT(b.fname,  ' ', b.mname,  ' ',  b.lname, ' ', b.suffix) AS clientname, b.company_name, b.user_position, b.site_id, b.team_, c.client_id, c.client_name, c.acronym_, c.site_, d.user_id, d.assigned_team, CONCAT(d.fname, ' ', d.mname, ' ', d.lname, ' ', d.suffix) AS supervisorname FROM tbl_endo AS a LEFT JOIN tbl_client AS b ON a.client_id = b.user_id LEFT JOIN client_list AS c ON a.site_id = c.client_id LEFT JOIN tbl_supervisor AS d ON a.endorsed_to = d.user_id WHERE a.endorsed_to = '" . $_SESSION["user_id"] . "' AND a.endo_status = '0' ORDER BY a.importance ASC";
+                                  $sql = "SELECT a.id, a.endo_id, a.endo_desc, a.endo_code, CONCAT(a.fname, ' ', a.mname, ' ', a.lname, ' ', a.suffix) AS applicantname, a.application_code, a.birthdate, a.endo_date, a.endo_status, a.is_for_review, a.is_done, a.is_rerun, a.folder_name,  a.document_status_others, a.remarks_others, a.document_status_employment, a.remarks_employment, a.document_status_education, a.remarks_education, a.endorsed_to, a.turn_around_date, a.endo_services, a.package_desc, a.client_id, a.site_id, a.endo_requestor, a.change_package, a.importance, a.bi_id, a.closure_date, a.account, a.initiation_date, b.user_id, CONCAT(b.user_id) AS clientuserid, CONCAT(b.fname,  ' ', b.mname,  ' ',  b.lname, ' ', b.suffix) AS clientname, b.company_name, b.user_position, b.site_id, b.team_, c.client_id, c.client_name, c.acronym_, c.site_, d.user_id, d.assigned_team, CONCAT(d.fname, ' ', d.mname, ' ', d.lname, ' ', d.suffix) AS supervisorname FROM tbl_endo AS a LEFT JOIN tbl_client AS b ON a.client_id = b.user_id LEFT JOIN client_list AS c ON a.site_id = c.client_id LEFT JOIN tbl_supervisor AS d ON a.endorsed_to = d.user_id WHERE a.endorsed_to = '" . $_SESSION["user_id"] . "' AND a.endo_status = '0' ORDER BY a.endo_date DESC";
                                   $result = $conn->query($sql);
                                   if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -249,43 +249,43 @@ toastr['danger']('Report sending error.');
                                         $endorerun = "";
                                       }
 
-                                  ?>
+                                      ?>
 
-                                  <tr>
-                                    <input type="hidden" id="endoCode_" name="endoCode_<?= $row['endo_code'] ?>"
-                                      value="<?= $row['endo_code'] ?>">
-                                    <input type="hidden" id="client_id" name="client_id"
-                                      value="<?= $row['client_id'] ?>">
-                                    <input type="hidden" id="clientuserid" name="clientuserid"
-                                      value="<?= $row['clientuserid'] ?>">
-                                    <td>
-                                      <label class="fancy-checkbox">
-                                        <input class="checkbox-tick" type="checkbox" id="biapproval[]"
-                                          name="biapproval[]" value='<?= $row['endo_code'] ?>'>
-                                        <span></span>
-                                      </label>
-                                    </td>
-                                    <td><?php echo $endoimportant; ?></td>
-                                    <td style="cursor: pointer;" data-toggle="tooltip" data-placement="top"
-                                      title="<?php echo $row['applicantname']; ?>"><?php echo $row['endo_code']; ?></td>
-                                    <td><?php echo $endorerun; ?></td>
-                                    <td><?php echo $newDateEndo; ?></td>
-                                    <td style="text-align: center;">
-                                      <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-                                        data-placement="top" title="View Endorsement"
-                                        onclick="displaybiendorsements('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
-                                          class="fa fa-file-text-o"></i></button>
-                                      <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
-                                        class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
-                                        data-placement="top" title="View Informations"><i class="fa fa-edit"></i></a>
-                                      <a onclick="savesupportingdocsbi();"
-                                        href="bi_supporting_docs.php?endoCode=<?php echo $row['endo_code'] ?>"
-                                        class="btn btn-sm btn-outline-success" data-toggle="tooltip"
-                                        data-placement="top" title="Download Documents"><i
-                                          class="fa fa-download"></i></a>
-                                    </td>
-                                  </tr>
-                                  <?php
+                                      <tr>
+                                        <input type="hidden" id="endoCode_" name="endoCode_<?= $row['endo_code'] ?>"
+                                          value="<?= $row['endo_code'] ?>">
+                                        <input type="hidden" id="client_id" name="client_id"
+                                          value="<?= $row['client_id'] ?>">
+                                        <input type="hidden" id="clientuserid" name="clientuserid"
+                                          value="<?= $row['clientuserid'] ?>">
+                                        <td>
+                                          <label class="fancy-checkbox">
+                                            <input class="checkbox-tick" type="checkbox" id="biapproval[]"
+                                              name="biapproval[]" value='<?= $row['endo_code'] ?>'>
+                                            <span></span>
+                                          </label>
+                                        </td>
+                                        <td><?php echo $endoimportant; ?></td>
+                                        <td style="cursor: pointer;" data-toggle="tooltip" data-placement="top"
+                                          title="<?php echo $row['applicantname']; ?>"><?php echo $row['endo_code']; ?></td>
+                                        <td><?php echo $endorerun; ?></td>
+                                        <td><?php echo $newDateEndo; ?></td>
+                                        <td style="text-align: center;">
+                                          <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+                                            data-placement="top" title="View Endorsement"
+                                            onclick="displaybiendorsements('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
+                                              class="fa fa-file-text-o"></i></button>
+                                          <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
+                                            class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
+                                            data-placement="top" title="View Informations"><i class="fa fa-edit"></i></a>
+                                          <a onclick="savesupportingdocsbi();"
+                                            href="bi_supporting_docs.php?endoCode=<?php echo $row['endo_code'] ?>"
+                                            class="btn btn-sm btn-outline-success" data-toggle="tooltip"
+                                            data-placement="top" title="Download Documents"><i
+                                              class="fa fa-download"></i></a>
+                                        </td>
+                                      </tr>
+                                      <?php
                                     }
                                   }
                                   ?>
@@ -390,15 +390,15 @@ toastr['danger']('Report sending error.');
                                                   ?>
                                                   <option> -- Select
                                                     Verifier -- </option>; <?php
-                                                                            $res = $conn->query($sql);
-                                                                            while ($row = mysqli_fetch_array($res)) {
-                                                                            ?>
-                                                  <option value="<?php echo $row['user_id']; ?>">
-                                                    <?php echo $row['telefullname']; ?>
-                                                  </option>
-                                                  <?php
-                                                                            }
-                                                  ?>
+                                                    $res = $conn->query($sql);
+                                                    while ($row = mysqli_fetch_array($res)) {
+                                                      ?>
+                                                    <option value="<?php echo $row['user_id']; ?>">
+                                                      <?php echo $row['telefullname']; ?>
+                                                    </option>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </select>
                                               </div>
                                             </div>
@@ -460,41 +460,41 @@ toastr['danger']('Report sending error.');
                                                     $opsanalystname = $row2['opsanalystname'];
                                                   }
 
-                                              ?>
-                                              <tr>
-                                                <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
-                                                  value="<?= $row['endorsementcode'] ?>">
-                                                <input type="hidden" id="client_id" name="client_id"
-                                                  value="<?= $row['clientuserid'] ?>">
-                                                <td>
-                                                  <label class="fancy-checkbox">
-                                                    <input class="checkbox-tick" type="checkbox" id="biassign[]"
-                                                      name="biassign[]" value='<?= $row['endorsementcode'] ?>'>
-                                                    <span></span>
-                                                  </label>
-                                                </td>
-                                                <td><?php echo $endoimportant; ?></td>
-                                                <td><?php echo $row['endorsementcode']; ?></td>
-                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                                <td><?php echo $row['birthdate']; ?></td>
-                                                <td><?php echo $newDateEndo; ?></td>
-                                                <td style="text-align: center;">
-                                                  <button type="button" class="btn btn-sm btn-outline-dark"
-                                                    data-toggle="tooltip" data-placement="top" title="View Endorsement"
-                                                    onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endorsementcode']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
-                                                      class="fa fa-file-text-o"></i></button>
-                                                  <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
-                                                    class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
-                                                    data-placement="top" title="View Informations"><i
-                                                      class="fa fa-edit"></i></a>
-                                                  <a onclick="savesupportingdocsbi();"
-                                                    href="bi_supporting_docs.php?endoCode=<?php echo $row['endorsementcode'] ?>"
-                                                    class="btn btn-sm btn-outline-success" data-toggle="tooltip"
-                                                    data-placement="top" title="Download Documents"><i
-                                                      class="fa fa-download"></i></a>
-                                                </td>
-                                              </tr>
-                                              <?php
+                                                  ?>
+                                                  <tr>
+                                                    <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
+                                                      value="<?= $row['endorsementcode'] ?>">
+                                                    <input type="hidden" id="client_id" name="client_id"
+                                                      value="<?= $row['clientuserid'] ?>">
+                                                    <td>
+                                                      <label class="fancy-checkbox">
+                                                        <input class="checkbox-tick" type="checkbox" id="biassign[]"
+                                                          name="biassign[]" value='<?= $row['endorsementcode'] ?>'>
+                                                        <span></span>
+                                                      </label>
+                                                    </td>
+                                                    <td><?php echo $endoimportant; ?></td>
+                                                    <td><?php echo $row['endorsementcode']; ?></td>
+                                                    <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                    <td><?php echo $row['birthdate']; ?></td>
+                                                    <td><?php echo $newDateEndo; ?></td>
+                                                    <td style="text-align: center;">
+                                                      <button type="button" class="btn btn-sm btn-outline-dark"
+                                                        data-toggle="tooltip" data-placement="top" title="View Endorsement"
+                                                        onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endorsementcode']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
+                                                          class="fa fa-file-text-o"></i></button>
+                                                      <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
+                                                        class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
+                                                        data-placement="top" title="View Informations"><i
+                                                          class="fa fa-edit"></i></a>
+                                                      <a onclick="savesupportingdocsbi();"
+                                                        href="bi_supporting_docs.php?endoCode=<?php echo $row['endorsementcode'] ?>"
+                                                        class="btn btn-sm btn-outline-success" data-toggle="tooltip"
+                                                        data-placement="top" title="Download Documents"><i
+                                                          class="fa fa-download"></i></a>
+                                                    </td>
+                                                  </tr>
+                                                  <?php
                                                 }
                                               }
                                               ?>
@@ -589,15 +589,15 @@ toastr['danger']('Report sending error.');
                                                   ?>
                                                   <option> -- Select
                                                     Verifier -- </option>; <?php
-                                                                            $res = $conn->query($sql);
-                                                                            while ($row = mysqli_fetch_array($res)) {
-                                                                            ?>
-                                                  <option value="<?php echo $row['user_id']; ?>">
-                                                    <?php echo $row['telefullname']; ?>
-                                                  </option>
-                                                  <?php
-                                                                            }
-                                                  ?>
+                                                    $res = $conn->query($sql);
+                                                    while ($row = mysqli_fetch_array($res)) {
+                                                      ?>
+                                                    <option value="<?php echo $row['user_id']; ?>">
+                                                      <?php echo $row['telefullname']; ?>
+                                                    </option>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </select>
                                               </div>
                                             </div>
@@ -658,30 +658,30 @@ toastr['danger']('Report sending error.');
                                                     $opsanalystname = $row2['opsanalystname'];
                                                   }
 
-                                              ?>
-                                              <tr>
-                                                <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
-                                                  value="<?= $row['endorsementcode'] ?>">
-                                                <input type="hidden" id="client_id" name="client_id"
-                                                  value="<?= $row['clientuserid'] ?>">
-                                                <td>
-                                                  <label class="fancy-checkbox">
-                                                    <input class="checkbox-tick" type="checkbox" id="bireassign[]"
-                                                      name="bireassign[]" value='<?= $row['endorsementcode'] ?>'>
-                                                    <span></span>
-                                                  </label>
-                                                </td>
-                                                <td><?php echo $endoimportant; ?></td>
-                                                <td><?php echo $row['endorsementcode']; ?></td>
-                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                                <td><?php echo $newDateEndo; ?></td>
-                                                <td style="text-align: center;"><button type="button"
-                                                    class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-                                                    data-placement="top" title="View Endorsement"
-                                                    onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endorsementcode']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
-                                                      class="fa fa-file-text-o"></i></button></td>
-                                              </tr>
-                                              <?php
+                                                  ?>
+                                                  <tr>
+                                                    <input type="hidden" name="endoCode_<?= $row['endorsementcode'] ?>"
+                                                      value="<?= $row['endorsementcode'] ?>">
+                                                    <input type="hidden" id="client_id" name="client_id"
+                                                      value="<?= $row['clientuserid'] ?>">
+                                                    <td>
+                                                      <label class="fancy-checkbox">
+                                                        <input class="checkbox-tick" type="checkbox" id="bireassign[]"
+                                                          name="bireassign[]" value='<?= $row['endorsementcode'] ?>'>
+                                                        <span></span>
+                                                      </label>
+                                                    </td>
+                                                    <td><?php echo $endoimportant; ?></td>
+                                                    <td><?php echo $row['endorsementcode']; ?></td>
+                                                    <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                    <td><?php echo $newDateEndo; ?></td>
+                                                    <td style="text-align: center;"><button type="button"
+                                                        class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+                                                        data-placement="top" title="View Endorsement"
+                                                        onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endorsementcode']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
+                                                          class="fa fa-file-text-o"></i></button></td>
+                                                  </tr>
+                                                  <?php
                                                 }
                                               }
                                               ?>
@@ -813,34 +813,34 @@ toastr['danger']('Report sending error.');
                                                 $endoimportant = '<div class="feeds-left"><img src="../images/icons/low_imp.png" class="rounded-circle width35" alt="" style="width: 20px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Low Importance"></div>';
                                               }
 
-                                          ?>
-                                          <tr>
-                                            <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
-                                              value="<?= $row['endo_code'] ?>">
-                                            <input type="hidden" id="client_id" name="client_id"
-                                              value="<?= $row['clientuserid'] ?>">
-                                            <input type="hidden" id="ops_id" name="ops_id"
-                                              value="<?= $row['operationsid'] ?>">
-                                            <td>
-                                              <label class="fancy-checkbox">
-                                                <input class="checkbox-tick" type="checkbox" id="bireturnendo[]"
-                                                  name="bireturnendo[]" value='<?= $row['endo_code'] ?>'>
-                                                <span></span>
-                                              </label>
-                                            </td>
-                                            <td><?php echo $endoimportant; ?></td>
-                                            <td><?php echo $row['endo_code']; ?></td>
-                                            <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                            <td><?php echo $newDateEndo; ?></td>
-                                            <td style="text-align: center;">
-                                              <button type="button" class="btn btn-sm btn-outline-dark"
-                                                data-toggle="tooltip" data-placement="top"
-                                                title="View Returned Endorsement"
-                                                onclick="displayreturnbi('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['operationsname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); saveviewreturnedbiendo();"><i
-                                                  class="fa fa-file-text-o"></i></button>
-                                            </td>
-                                          </tr>
-                                          <?php
+                                              ?>
+                                              <tr>
+                                                <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
+                                                  value="<?= $row['endo_code'] ?>">
+                                                <input type="hidden" id="client_id" name="client_id"
+                                                  value="<?= $row['clientuserid'] ?>">
+                                                <input type="hidden" id="ops_id" name="ops_id"
+                                                  value="<?= $row['operationsid'] ?>">
+                                                <td>
+                                                  <label class="fancy-checkbox">
+                                                    <input class="checkbox-tick" type="checkbox" id="bireturnendo[]"
+                                                      name="bireturnendo[]" value='<?= $row['endo_code'] ?>'>
+                                                    <span></span>
+                                                  </label>
+                                                </td>
+                                                <td><?php echo $endoimportant; ?></td>
+                                                <td><?php echo $row['endo_code']; ?></td>
+                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                <td><?php echo $newDateEndo; ?></td>
+                                                <td style="text-align: center;">
+                                                  <button type="button" class="btn btn-sm btn-outline-dark"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="View Returned Endorsement"
+                                                    onclick="displayreturnbi('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['operationsname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); saveviewreturnedbiendo();"><i
+                                                      class="fa fa-file-text-o"></i></button>
+                                                </td>
+                                              </tr>
+                                              <?php
                                             }
                                           }
                                           ?>
@@ -900,25 +900,25 @@ toastr['danger']('Report sending error.');
                                               $datetime_returned = $row['datetime_returned'];
                                               $newDateTimeReturned = date('F d, Y - g:i A', strtotime($datetime_returned));
 
-                                          ?>
-                                          <tr>
-                                            <td>
-                                              <?php
+                                              ?>
+                                              <tr>
+                                                <td>
+                                                  <?php
                                                   echo '<div class="feeds-left"><img src="../profilepictures_/' . $operationsid . '/' . $user_image . '" class="rounded-circle width35" alt="" style="width: 35px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="' . $operationsname . '"></div>'
-                                                  ?>
-                                            </td>
-                                            <td><?php echo $row['endo_code']; ?></td>
-                                            <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                            <td><?php echo $newDateEndo ?></td>
-                                            <td style="text-align: center;">
-                                              <button type="button" class="btn btn-sm btn-outline-dark"
-                                                data-toggle="tooltip" data-placement="top"
-                                                title="View Returned Endorsement"
-                                                onclick="displayreturnhistorybi('<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['operationsname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $newDateTimeCleared; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); savereturnedbihistendo();"><i
-                                                  class="fa fa-history"></i></button>
-                                            </td>
-                                          </tr>
-                                          <?php
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $row['endo_code']; ?></td>
+                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                <td><?php echo $newDateEndo ?></td>
+                                                <td style="text-align: center;">
+                                                  <button type="button" class="btn btn-sm btn-outline-dark"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="View Returned Endorsement"
+                                                    onclick="displayreturnhistorybi('<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['operationsname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $newDateTimeCleared; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); savereturnedbihistendo();"><i
+                                                      class="fa fa-history"></i></button>
+                                                </td>
+                                              </tr>
+                                              <?php
                                             }
                                           }
                                           ?>
@@ -1003,41 +1003,41 @@ toastr['danger']('Report sending error.');
                                     $opsanalystname = $row2['opsanalystname'];
                                     $opsanalystid = $row2['opsanalystid'];
 
-                                ?>
-                                <tr>
-                                  <td><?php echo $endoimportant; ?></td>
-                                  <td><?php echo $row['endo_code']; ?></td>
-                                  <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                  <td><?php echo $newDateEndo; ?></td>
-                                  <td style="text-align: center;">
-                                    <a href="send_report_client.php?id=<?php echo $row['endo_id'] ?>"
-                                      class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top"
-                                      title="Send Report"><i class="fa fa-paper-plane-o"></i></a>
-                                    <a onclick="savesupportingdocsbi();"
-                                      href="bi_supporting_docs.php?endoCode=<?php echo $row['endo_code'] ?>"
-                                      class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top"
-                                      title="Download Documents"><i class="fa fa-download"></i></a>
-                                    <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-                                      data-placement="top" title="View Endorsement"
-                                      onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
-                                        class="fa fa-file-text-o"></i></button>
-                                    <a href="bi_view_report.php?endoCode=<?php echo $row['endo_code'] ?>"
-                                      class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top"
-                                      title="View Report"><i class="fa fa-folder-o"></i></a>
-                                    <!--<a href="generate_bi_report.php?file=<?php echo $row['endo_code'] ?>" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>-->
-                                    <a href="download_file.php?file=<?php echo $row['endo_code'] ?>"
-                                      class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
-                                      data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="tooltip"
-                                      data-placement="top" title="Return Endorsement"
-                                      onclick="displayreturnendobi('<?php echo $row['applicantname']; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $supervisorid; ?>', '<?php echo $opsanalystid; ?>', '<?php echo $row['clientid']; ?>');"><i
-                                        class="fa fa-undo"></i></button>
-                                    <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
-                                      class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top"
-                                      title="View Informations"><i class="fa fa-edit"></i></a>
-                                  </td>
-                                </tr>
-                                <?php
+                                    ?>
+                                    <tr>
+                                      <td><?php echo $endoimportant; ?></td>
+                                      <td><?php echo $row['endo_code']; ?></td>
+                                      <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                      <td><?php echo $newDateEndo; ?></td>
+                                      <td style="text-align: center;">
+                                        <a href="send_report_client.php?id=<?php echo $row['endo_id'] ?>"
+                                          class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top"
+                                          title="Send Report"><i class="fa fa-paper-plane-o"></i></a>
+                                        <a onclick="savesupportingdocsbi();"
+                                          href="bi_supporting_docs.php?endoCode=<?php echo $row['endo_code'] ?>"
+                                          class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top"
+                                          title="Download Documents"><i class="fa fa-download"></i></a>
+                                        <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+                                          data-placement="top" title="View Endorsement"
+                                          onclick="displaybiassignendorsements('<?php echo $supportname; ?>', '<?php echo $supervisorname; ?>', '<?php echo $opsverifiername; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_desc']; ?>', '<?php echo $newTurnAroundDate; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>', '<?php echo $row['package_desc']; ?>'); saveviewendobi();"><i
+                                            class="fa fa-file-text-o"></i></button>
+                                        <a href="bi_view_report.php?endoCode=<?php echo $row['endo_code'] ?>"
+                                          class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top"
+                                          title="View Report"><i class="fa fa-folder-o"></i></a>
+                                        <!--<a href="generate_bi_report.php?file=<?php echo $row['endo_code'] ?>" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>-->
+                                        <a href="download_file.php?file=<?php echo $row['endo_code'] ?>"
+                                          class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                          data-placement="top" title="Download Report"><i class="fa fa-files-o"></i></a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="tooltip"
+                                          data-placement="top" title="Return Endorsement"
+                                          onclick="displayreturnendobi('<?php echo $row['applicantname']; ?>', '<?php echo $opsanalystname; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $supervisorid; ?>', '<?php echo $opsanalystid; ?>', '<?php echo $row['clientid']; ?>');"><i
+                                            class="fa fa-undo"></i></button>
+                                        <a href="download_informations.php?applicationCode=<?php echo $row['application_code'] ?>"
+                                          class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top"
+                                          title="View Informations"><i class="fa fa-edit"></i></a>
+                                      </td>
+                                    </tr>
+                                    <?php
                                   }
                                 }
                                 ?>
@@ -1171,38 +1171,38 @@ toastr['danger']('Report sending error.');
                                                 $endoimportant = '<div class="feeds-left"><img src="../images/icons/low_imp.png" class="rounded-circle width35" alt="" style="width: 20px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Low Importance"></div>';
                                               }
 
-                                          ?>
-                                          <tr>
-                                            <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
-                                              value="<?= $row['endo_code'] ?>">
-                                            <input type="hidden" id="client_id" name="client_id"
-                                              value="<?= $row['clientuserid'] ?>">
-                                            <input type="hidden" id="file_name" name="file_name"
-                                              value="<?= $row['file_name'] ?>">
-                                            <input type="hidden" id="endo_id" name="endo_id"
-                                              value="<?= $row['endo_id'] ?>">
-                                            <input type="hidden" id="acronym" name="acronym"
-                                              value="<?= $row['acronym_'] ?>">
-                                            <td>
-                                              <label class="fancy-checkbox">
-                                                <input class="checkbox-tick" type="checkbox" id="bimodifyendo[]"
-                                                  name="bimodifyendo[]" value='<?= $row['endo_code'] ?>'>
-                                                <span></span>
-                                              </label>
-                                            </td>
-                                            <td><?php echo $endoimportant; ?></td>
-                                            <td><?php echo $row['endo_code']; ?></td>
-                                            <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                            <td><?php echo $newDateEndo; ?></td>
-                                            <td style="text-align: center;">
-                                              <button type="button" class="btn btn-sm btn-outline-dark"
-                                                data-toggle="tooltip" data-placement="top"
-                                                title="View Returned Endorsement"
-                                                onclick="displaymodifybi('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); saveviewmodifybiendo();"><i
-                                                  class="fa fa-file-text-o"></i></button>
-                                            </td>
-                                          </tr>
-                                          <?php
+                                              ?>
+                                              <tr>
+                                                <input type="hidden" name="endoCode_<?= $row['endo_code'] ?>"
+                                                  value="<?= $row['endo_code'] ?>">
+                                                <input type="hidden" id="client_id" name="client_id"
+                                                  value="<?= $row['clientuserid'] ?>">
+                                                <input type="hidden" id="file_name" name="file_name"
+                                                  value="<?= $row['file_name'] ?>">
+                                                <input type="hidden" id="endo_id" name="endo_id"
+                                                  value="<?= $row['endo_id'] ?>">
+                                                <input type="hidden" id="acronym" name="acronym"
+                                                  value="<?= $row['acronym_'] ?>">
+                                                <td>
+                                                  <label class="fancy-checkbox">
+                                                    <input class="checkbox-tick" type="checkbox" id="bimodifyendo[]"
+                                                      name="bimodifyendo[]" value='<?= $row['endo_code'] ?>'>
+                                                    <span></span>
+                                                  </label>
+                                                </td>
+                                                <td><?php echo $endoimportant; ?></td>
+                                                <td><?php echo $row['endo_code']; ?></td>
+                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                <td><?php echo $newDateEndo; ?></td>
+                                                <td style="text-align: center;">
+                                                  <button type="button" class="btn btn-sm btn-outline-dark"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="View Returned Endorsement"
+                                                    onclick="displaymodifybi('<?php echo $row['applicantname']; ?>', '<?php echo $newDateEndo; ?>', '<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); saveviewmodifybiendo();"><i
+                                                      class="fa fa-file-text-o"></i></button>
+                                                </td>
+                                              </tr>
+                                              <?php
                                             }
                                           }
                                           ?>
@@ -1262,25 +1262,25 @@ toastr['danger']('Report sending error.');
                                               $datetime_returned = $row['datetime_returned'];
                                               $newDateTimeReturned = date('F d, Y - g:i A', strtotime($datetime_returned));
 
-                                          ?>
-                                          <tr>
-                                            <td>
-                                              <?php
+                                              ?>
+                                              <tr>
+                                                <td>
+                                                  <?php
                                                   echo '<div class="feeds-left"><img src="../profilepictures_/' . $operationsid . '/' . $user_image . '" class="rounded-circle width35" alt="" style="width: 35px; margin-top: -2px; margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="' . $operationsname . '"></div>'
-                                                  ?>
-                                            </td>
-                                            <td><?php echo $row['endo_code']; ?></td>
-                                            <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
-                                            <td><?php echo $newDateEndo ?></td>
-                                            <td style="text-align: center;">
-                                              <button type="button" class="btn btn-sm btn-outline-dark"
-                                                data-toggle="tooltip" data-placement="top"
-                                                title="View Returned Endorsement"
-                                                onclick="displayreturnhistorybi('<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $newDateTimeCleared; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); savemodifybihistendo();"><i
-                                                  class="fa fa-history"></i></button>
-                                            </td>
-                                          </tr>
-                                          <?php
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $row['endo_code']; ?></td>
+                                                <td style="font-weight: bold;"><?php echo $row['applicantname']; ?></td>
+                                                <td><?php echo $newDateEndo ?></td>
+                                                <td style="text-align: center;">
+                                                  <button type="button" class="btn btn-sm btn-outline-dark"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="View Returned Endorsement"
+                                                    onclick="displayreturnhistorybi('<?php echo $row['endo_code']; ?>', '<?php echo $row['endo_remarks']; ?>', '<?php echo $row['supervisorname']; ?>', '<?php echo $row['clientname']; ?>', '<?php echo $newDateTimeReturned; ?>', '<?php echo $newDateTimeCleared; ?>', '<?php echo $row['company_name'] . ' - ' . $row['site_']; ?>'); savemodifybihistendo();"><i
+                                                      class="fa fa-history"></i></button>
+                                                </td>
+                                              </tr>
+                                              <?php
                                             }
                                           }
                                           ?>
@@ -1352,6 +1352,26 @@ toastr['danger']('Report sending error.');
                   </q-input>
                 </template>
 
+                <template v-slot:body="props">
+                  <q-tr :props="props" class="cursor-pointer">
+                    <q-td auto-width>
+                      <q-checkbox keep-color v-model="props.selected" color="green" />
+                    </q-td>
+                    <q-td v-for="col in props.cols" :key="col.name" :props="props">
+                      <div v-if="col.name === 'hasFiles'">
+                        <div v-if="col.value === 'YES'">
+                          <q-btn label="FILES" @click="getFiles(props.row)" icon="fa fa-file" size="sm"
+                            color="green"></q-btn>
+                        </div>
+                        <div v-else> {{ col.value }}</div>
+                      </div>
+                      <div v-else>
+                        {{ col.value }}
+                      </div>
+                    </q-td>
+                  </q-tr>
+                </template>
+
               </q-table>
             </q-tab-panel>
 
@@ -1397,6 +1417,50 @@ toastr['danger']('Report sending error.');
       </q-form>
     </q-card>
   </q-dialog>
+
+  <q-dialog v-model="this.bools.fileDialog">
+    <q-card style="width: 65vw !important; max-width: 65vw !important">
+      <q-card-section class="text-uppercase text-h5" align="center">
+        FILES OF {{ this.currentCandidate.full_name }}
+      </q-card-section>
+      <q-card-section>
+        <div class="row q-pb-md">
+          <div class="col text-weight-bold">
+            Type 
+          </div>
+          <div class="col text-weight-bold">
+            Tag  
+          </div>
+          <div class="col text-weight-bold">
+            Name 
+          </div>
+          <div class="col text-weight-bold">
+            File Type 
+          </div>
+          <div class="col text-weight-bold">
+            URL 
+          </div>
+        </div>
+        <div class="row q-pb-sm" v-for="file of this.currentCandidate.files" :key="files">
+          <div class="col">
+            {{ file.type }}
+          </div>
+          <div class="col">
+            {{ file.tag }}
+          </div>
+          <div class="col">
+            {{ file.name }}
+          </div>
+          <div class="col">
+            {{ file.content_type }}
+          </div>
+          <div class="col">
+            <q-btn icon="fa fa-file" size="sm" :label="file.name" color="green" :href="file.content_url" target="_blank"></q-btn>
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </div>
 
 
@@ -1415,167 +1479,168 @@ include 'script.php';
 
 
 <script type="text/javascript">
-$(document).ready(function() {
-  // ACKNOWLEDGEMENT //
-  // Check/Uncheck All
-  $('#chkallapprbi').change(function() {
-    if ($(this).is(':checked')) {
-      $('input[name="biapproval[]"]').prop('checked', true);
-    } else {
-      $('input[name="biapproval[]"]').each(function() {
-        $(this).prop('checked', false);
+  $(document).ready(function () {
+    // ACKNOWLEDGEMENT //
+    // Check/Uncheck All
+    $('#chkallapprbi').change(function () {
+      if ($(this).is(':checked')) {
+        $('input[name="biapproval[]"]').prop('checked', true);
+      } else {
+        $('input[name="biapproval[]"]').each(function () {
+          $(this).prop('checked', false);
+        });
+      }
+      inpu
+      // Checkbox click
+      $('input[name="biapproval[]"]').click(function () {
+        var total_checkboxes = $('input[name="biapproval[]"]').length;
+        var total_checkboxes_checked = $('input[name="biapproval[]"]:checked').length;
+
+        if (total_checkboxes_checked == total_checkboxes) {
+          $('#chkallapprbi').prop('checked', true);
+        } else {
+          $('#chkallapprbi').prop('checked', false);
+        }
       });
-    }
-    inpu
-    // Checkbox click
-    $('input[name="biapproval[]"]').click(function() {
-      var total_checkboxes = $('input[name="biapproval[]"]').length;
-      var total_checkboxes_checked = $('input[name="biapproval[]"]:checked').length;
-
-      if (total_checkboxes_checked == total_checkboxes) {
-        $('#chkallapprbi').prop('checked', true);
-      } else {
-        $('#chkallapprbi').prop('checked', false);
-      }
     });
+
+    // ASSIGNING //
+    $(document).ready(function () {
+      // Check/Uncheck All
+      $('#chkallassignbi').change(function () {
+        if ($(this).is(':checked')) {
+          $('input[name="biassign[]"]').prop('checked', true);
+        } else {
+          $('input[name="biassign[]"]').each(function () {
+            $(this).prop('checked', false);
+          });
+        }
+      });
+      // Checkbox click
+      $('input[name="biassign[]"]').click(function () {
+        var total_checkboxes = $('input[name="biassign[]"]').length;
+        var total_checkboxes_checked = $('input[name="biassign[]"]:checked').length;
+
+        if (total_checkboxes_checked == total_checkboxes) {
+          $('#chkallassignbi').prop('checked', true);
+        } else {
+          $('#chkallassignbi').prop('checked', false);
+        }
+      });
+
+      $('#chkallreassignbi').change(function () {
+        if ($(this).is(':checked')) {
+          $('input[name="bireassign[]"]').prop('checked', true);
+        } else {
+          $('input[name="bireassign[]"]').each(function () {
+            $(this).prop('checked', false);
+          });
+        }
+      });
+      $('input[name="bireassign[]"]').click(function () {
+        var total_checkboxes = $('input[name="bireassign[]"]').length;
+        var total_checkboxes_checked = $('input[name="bireassign[]"]:checked').length;
+
+        if (total_checkboxes_checked == total_checkboxes) {
+          $('#chkallreassignbi').prop('checked', true);
+        } else {
+          $('#chkallreassignbi').prop('checked', false);
+        }
+      });
+    });
+
+    // RETURNED //
+    $(document).ready(function () {
+      // Check/Uncheck All
+      $('#chkallreturnedendobi').change(function () {
+        if ($(this).is(':checked')) {
+          $('input[name="bireturnendo[]"]').prop('checked', true);
+        } else {
+          $('input[name="bireturnendo[]"]').each(function () {
+            $(this).prop('checked', false);
+          });
+        }
+      });
+
+      // Checkbox click
+      $('input[name="bireturnendo[]"]').click(function () {
+        var total_checkboxes = $('input[name="bireturnendo[]"]').length;
+        var total_checkboxes_checked = $('input[name="bireturnendo[]"]:checked').length;
+
+        if (total_checkboxes_checked == total_checkboxes) {
+          $('#chkallreturnedendobi').prop('checked', true);
+        } else {
+          $('#chkallreturnedendobi').prop('checked', false);
+        }
+      });
+    });
+
+    // MODIFY //
+    $(document).ready(function () {
+      // Check/Uncheck All
+      $('#chkallmodifyendobi').change(function () {
+        if ($(this).is(':checked')) {
+          $('input[name="bimodifyendo[]"]').prop('checked', true);
+        } else {
+          $('input[name="bimodifyendo[]"]').each(function () {
+            $(this).prop('checked', false);
+          });
+        }
+      });
+
+      // Checkbox click
+      $('input[name="bimodifyendo[]"]').click(function () {
+        var total_checkboxes = $('input[name="bimodifyendo[]"]').length;
+        var total_checkboxes_checked = $('input[name="bimodifyendo[]"]:checked').length;
+
+        if (total_checkboxes_checked == total_checkboxes) {
+          $('#chkallmodifyendobi').prop('checked', true);
+        } else {
+          $('#chkallmodifyendobi').prop('checked', false);
+        }
+      });
+    });
+
+    // document.getElementById('btnsyncendo').addEventListener('click', async function(event) {
+    //   event.preventDefault(); // prevent form submission if it's inside a form
+
+    //   var requestOptions = {
+    //     method: 'GET',
+    //     redirect: 'follow'
+    //   };
+
+
+    //   await fetch("https://lendell.ph/api/losis/talkpush/candidates?status=hired", requestOptions)
+    //     .then(response => response.text())
+    //     .then(result => {
+    //       console.log(result)
+    //       $('#endoModal').modal('show')
+    //       // $('#myModal').modal(options)
+    //     }) // or update the DOM with result
+    //     .catch(error => console.log('error', error));
   });
-
-  // ASSIGNING //
-  $(document).ready(function() {
-    // Check/Uncheck All
-    $('#chkallassignbi').change(function() {
-      if ($(this).is(':checked')) {
-        $('input[name="biassign[]"]').prop('checked', true);
-      } else {
-        $('input[name="biassign[]"]').each(function() {
-          $(this).prop('checked', false);
-        });
-      }
-    });
-    // Checkbox click
-    $('input[name="biassign[]"]').click(function() {
-      var total_checkboxes = $('input[name="biassign[]"]').length;
-      var total_checkboxes_checked = $('input[name="biassign[]"]:checked').length;
-
-      if (total_checkboxes_checked == total_checkboxes) {
-        $('#chkallassignbi').prop('checked', true);
-      } else {
-        $('#chkallassignbi').prop('checked', false);
-      }
-    });
-
-    $('#chkallreassignbi').change(function() {
-      if ($(this).is(':checked')) {
-        $('input[name="bireassign[]"]').prop('checked', true);
-      } else {
-        $('input[name="bireassign[]"]').each(function() {
-          $(this).prop('checked', false);
-        });
-      }
-    });
-    $('input[name="bireassign[]"]').click(function() {
-      var total_checkboxes = $('input[name="bireassign[]"]').length;
-      var total_checkboxes_checked = $('input[name="bireassign[]"]:checked').length;
-
-      if (total_checkboxes_checked == total_checkboxes) {
-        $('#chkallreassignbi').prop('checked', true);
-      } else {
-        $('#chkallreassignbi').prop('checked', false);
-      }
-    });
-  });
-
-  // RETURNED //
-  $(document).ready(function() {
-    // Check/Uncheck All
-    $('#chkallreturnedendobi').change(function() {
-      if ($(this).is(':checked')) {
-        $('input[name="bireturnendo[]"]').prop('checked', true);
-      } else {
-        $('input[name="bireturnendo[]"]').each(function() {
-          $(this).prop('checked', false);
-        });
-      }
-    });
-
-    // Checkbox click
-    $('input[name="bireturnendo[]"]').click(function() {
-      var total_checkboxes = $('input[name="bireturnendo[]"]').length;
-      var total_checkboxes_checked = $('input[name="bireturnendo[]"]:checked').length;
-
-      if (total_checkboxes_checked == total_checkboxes) {
-        $('#chkallreturnedendobi').prop('checked', true);
-      } else {
-        $('#chkallreturnedendobi').prop('checked', false);
-      }
-    });
-  });
-
-  // MODIFY //
-  $(document).ready(function() {
-    // Check/Uncheck All
-    $('#chkallmodifyendobi').change(function() {
-      if ($(this).is(':checked')) {
-        $('input[name="bimodifyendo[]"]').prop('checked', true);
-      } else {
-        $('input[name="bimodifyendo[]"]').each(function() {
-          $(this).prop('checked', false);
-        });
-      }
-    });
-
-    // Checkbox click
-    $('input[name="bimodifyendo[]"]').click(function() {
-      var total_checkboxes = $('input[name="bimodifyendo[]"]').length;
-      var total_checkboxes_checked = $('input[name="bimodifyendo[]"]:checked').length;
-
-      if (total_checkboxes_checked == total_checkboxes) {
-        $('#chkallmodifyendobi').prop('checked', true);
-      } else {
-        $('#chkallmodifyendobi').prop('checked', false);
-      }
-    });
-  });
-
-  // document.getElementById('btnsyncendo').addEventListener('click', async function(event) {
-  //   event.preventDefault(); // prevent form submission if it's inside a form
-
-  //   var requestOptions = {
-  //     method: 'GET',
-  //     redirect: 'follow'
-  //   };
-
-
-  //   await fetch("https://lendell.ph/api/losis/talkpush/candidates?status=hired", requestOptions)
-  //     .then(response => response.text())
-  //     .then(result => {
-  //       console.log(result)
-  //       $('#endoModal').modal('show')
-  //       // $('#myModal').modal(options)
-  //     }) // or update the DOM with result
-  //     .catch(error => console.log('error', error));
-});
 </script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quasar@2/dist/quasar.umd.prod.js"></script>
 <script>
-const app = Vue.createApp({
-  data() {
-    return {
-      apiHost: "<?php echo $apiURL; ?>",
-      bools: {
-        apiDialog: false,
-        clientDialog: false,
-        loading: false,
-      },
-      pagination: {
-        rowsPerPage: 0,
-      },
-      tab: 'hired',
-      candidateStatus: [],
-      columns: [{
+  const app = Vue.createApp({
+    data() {
+      return {
+        apiHost: "<?php echo $apiURL; ?>",
+        bools: {
+          apiDialog: false,
+          clientDialog: false,
+          loading: false,
+          fileDialog: false,
+        },
+        pagination: {
+          rowsPerPage: 0,
+        },
+        tab: 'hired',
+        candidateStatus: [],
+        columns: [{
           name: "external_client_id",
           label: "ID",
           field: "external_client_id",
@@ -1589,6 +1654,13 @@ const app = Vue.createApp({
           align: "center",
           label: "FULL NAME",
           field: "full_name",
+          sortable: true
+        },
+        {
+          name: "birthdate",
+          align: "center",
+          label: "BIRTHDATE",
+          field: "birthdate",
           sortable: true
         },
         {
@@ -1619,298 +1691,312 @@ const app = Vue.createApp({
           field: "folder",
           sortable: true
         },
-      ],
-      filter: '',
-      clientOptions: [],
-      supervisorOptions: [],
-      apiDetails: [],
-      selected: [],
-      requestOptions: {
-        method: 'GET',
-        redirect: 'follow'
+        {
+          name: "hasFiles",
+          align: "center",
+          label: "HAS FILES?",
+          field: "hasFiles",
+          sortable: true
+        },
+        ],
+        filter: '',
+        clientOptions: [],
+        supervisorOptions: [],
+        apiDetails: [],
+        selected: [],
+        requestOptions: {
+          method: 'GET',
+          redirect: 'follow'
+        },
+        endorsementDetails: {
+          client_id: '',
+          site_id: '',
+          team_id: '',
+        },
+        currentCandidate: {}
+      }
+    },
+    created() {
+      this.tab = 'hired'
+      this.fetchCandidateStatus()
+      this.fetchSupervisors()
+    },
+    // mounted() {
+    //   this.bools.apiDialog = true
+    // },
+    watch: {
+      tab(val) {
+        this.fetchApi(val)
+      }
+    },
+    methods: {
+      async fetchCandidateStatus() {
+        await fetch(`${this.apiHost}losis/candidates/status`, this.requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            this.candidateStatus = JSON.parse(result)
+          }) // or update the DOM with result
+          .catch(error => console.log('error', error));
       },
-      endorsementDetails: {
-        client_id: '',
-        site_id: '',
-        team_id: '',
-      }
-    }
-  },
-  created() {
-    this.fetchCandidateStatus()
-    this.fetchSupervisors()
-  },
-  // mounted() {
-  //   this.bools.apiDialog = true
-  // },
-  watch: {
-    tab(val) {
-      this.fetchApi(val)
-    }
-  },
-  methods: {
-    async fetchCandidateStatus() {
-      await fetch(`${this.apiHost}losis/candidates/status`, this.requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          this.candidateStatus = JSON.parse(result)
-        }) // or update the DOM with result
-        .catch(error => console.log('error', error));
-    },
-    async fetchClients(client = 'concentrix') {
-      await fetch(`${this.apiHost}losis/clients?company_name=${client}`, this.requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          this.clientOptions = JSON.parse(result)
-        }) // or update the DOM with result
-        .catch(error => console.log('error', error));
-    },
-    async fetchSupervisors(clientId) {
-      await fetch(`${this.apiHost}losis/clients/supervisor`, this.requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          this.supervisorOptions = JSON.parse(result)
-        }) // or update the DOM with result
-        .catch(error => console.log('error', error));
-    },
-    async fetchApi(candidateStatus) {
-      this.selected = []
-      if (event !== undefined) {
-        event.preventDefault();
-      }
-      this.bools.apiDialog = true
-      this.bools.loading = true
+      async fetchClients(client = 'concentrix') {
+        await fetch(`${this.apiHost}losis/clients?company_name=${client}`, this.requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            this.clientOptions = JSON.parse(result)
+          }) // or update the DOM with result
+          .catch(error => console.log('error', error));
+      },
+      async fetchSupervisors(clientId) {
+        await fetch(`${this.apiHost}losis/clients/supervisor`, this.requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            this.supervisorOptions = JSON.parse(result)
+          }) // or update the DOM with result
+          .catch(error => console.log('error', error));
+      },
+      async fetchApi(candidateStatus) {
+        this.selected = []
+        if (event !== undefined) {
+          event.preventDefault();
+        }
+        this.bools.apiDialog = true
+        this.bools.loading = true
 
-      // OVERALL CANDIDATES //
-      // await fetch(`${this.apiHost}losis/talkpush/candidates`, requestOptions)
-      //   .then(response => response.text())
-      //   .then(result => {
-      //     this.apiDetails = JSON.parse(result)
-      //   }) // or update the DOM with result
-      //   .catch(error => console.log('error', error));
-      // OVERALL CANDIDATES //
+        // OVERALL CANDIDATES //
+        // await fetch(`${this.apiHost}losis/talkpush/candidates`, requestOptions)
+        //   .then(response => response.text())
+        //   .then(result => {
+        //     this.apiDetails = JSON.parse(result)
+        //   }) // or update the DOM with result
+        //   .catch(error => console.log('error', error));
+        // OVERALL CANDIDATES //
 
-      // BY candidateStatus //
-      await fetch(`${this.apiHost}losis/talkpush/candidates-by-status?status=${candidateStatus}`, this
+        // BY candidateStatus //
+        await fetch(`${this.apiHost}losis/talkpush/candidates-by-status?status=${candidateStatus}`, this
           .requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          this.apiDetails = JSON.parse(result)
-        }) // or update the DOM with result
-        .catch(error => console.log('error', error));
-      // BY STATUS //
+          .then(response => response.text())
+          .then(result => {
+            this.apiDetails = JSON.parse(result)
+          }) // or update the DOM with result
+          .catch(error => console.log('error', error));
+        // BY STATUS //
 
-      this.bools.loading = false
-    },
+        this.bools.loading = false
+      },
 
-    async postCandidates() {
-      await this.$refs.clientForm.validate().then(async (valid) => {
-        if (!valid) {
-          return false;
-        }
+      async postCandidates() {
+        await this.$refs.clientForm.validate().then(async (valid) => {
+          if (!valid) {
+            return false;
+          }
 
-        if (this.supervisorOptions.data.length === 0) {
-          await this.fetchSupervisors()
-        }
+          if (this.supervisorOptions.data.length === 0) {
+            await this.fetchSupervisors()
+          }
 
-        let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value === this
-          .endorsementDetails.client_id)
-        let filterSupervisor = []
-        if (filterClients.length > 0) {
-          filterSupervisor = this.supervisorOptions.data.filter((filterSupervisor) => filterSupervisor
-            .supervisor_id === filterClients[0].supervisor_)
-        }
+          let filterClients = this.clientOptions.data.filter((filterClient) => filterClient.value === this
+            .endorsementDetails.client_id)
+          let filterSupervisor = []
+          if (filterClients.length > 0) {
+            filterSupervisor = this.supervisorOptions.data.filter((filterSupervisor) => filterSupervisor
+              .supervisor_id === filterClients[0].supervisor_)
+          }
 
-        this.$q
-          .dialog({
-            title: "Confirmation",
-            message: `Are you sure you want to assign the Candidate(s)?`,
-            ok: {
-              push: true,
-            },
-            cancel: {
-              push: true,
-              color: "negative",
-            },
-          })
-          .onOk(async () => {
-            this.bools.loading = true
-            let payload = {}
-
-            if (filterClients.length > 0) {
-              this.endorsementDetails.site_id = filterClients[0].site_id
-              this.endorsementDetails.team_id = filterClients[0].team_
-
-
-              if (this.selected.length > 0) {
-                for (const list of this.selected) {
-                  list.client_id = this.endorsementDetails.client_id
-                  list.site_id = this.endorsementDetails.site_id
-                  list.team_id = this.endorsementDetails.team_id
-                  list.supervisor_id = filterSupervisor[0].supervisor_id,
-                    list.user_supervisor_id = filterSupervisor[0].user_id
-                }
-
-                payload = this.selected
-              }
-            }
-
-            const url = `${this.apiHost}losis/candidates/endorsement`;
-            const response = await fetch(url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
+          this.$q
+            .dialog({
+              title: "Confirmation",
+              message: `Are you sure you want to assign the Candidate(s)?`,
+              ok: {
+                push: true,
               },
-              body: JSON.stringify(payload)
-            }).then(response => response.json())
+              cancel: {
+                push: true,
+                color: "negative",
+              },
+            })
+            .onOk(async () => {
+              this.bools.loading = true
+              let payload = {}
+
+              if (filterClients.length > 0) {
+                this.endorsementDetails.site_id = filterClients[0].site_id
+                this.endorsementDetails.team_id = filterClients[0].team_
 
 
-            this.bools.clientDialog = false
-            if (response.status === 'success') {
-              await this.fetchApi(this.tab)
-              this.bools.loading = false
+                if (this.selected.length > 0) {
+                  for (const list of this.selected) {
+                    list.client_id = this.endorsementDetails.client_id
+                    list.site_id = this.endorsementDetails.site_id
+                    list.team_id = this.endorsementDetails.team_id
+                    list.supervisor_id = filterSupervisor[0].supervisor_id,
+                      list.user_supervisor_id = '<?php echo $_SESSION['user_id']; ?>'
+                  }
 
-              this.$q.notify({
-                progress: true,
-                type: 'positive',
-                message: 'SUCCESSFULLY ASSIGNED CANDIDATE(S)',
-              });
-              this.bools.apiDialog = false
-              setTimeout(() => {
-                window.location.reload()
-              }, 500);
-            }
-          })
+                  payload = this.selected
+                }
+              }
 
-      })
-    },
-    async openClientDialog() {
-      this.bools.clientDialog = true
-      await this.fetchClients()
+              const url = `${this.apiHost}losis/candidates/endorsement`;
+              const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+              }).then(response => response.json())
+
+
+              this.bools.clientDialog = false
+              if (response.status === 'success') {
+                // await this.fetchApi(this.tab)
+                this.bools.loading = false
+
+                this.$q.notify({
+                  progress: true,
+                  type: 'positive',
+                  message: 'SUCCESSFULLY ASSIGNED CANDIDATE(S)',
+                });
+                this.bools.apiDialog = false
+                setTimeout(() => {
+                  window.location.reload()
+                }, 500);
+              }
+            })
+
+        })
+      },
+      async openClientDialog() {
+        this.bools.clientDialog = true
+        await this.fetchClients()
+      },
+
+      getFiles(row) {
+        this.bools.fileDialog = true
+        this.currentCandidate = row
+      }
     }
-  }
-})
+  })
 
-app.use(Quasar, {
-  config: {
-    brand: {
-      // ... or all other brand colors
-    },
-    notify: {}, // default set of options for Notify Quasar plugin
-    loading: {}, // default set of options for Loading Quasar plugin
-    loadingBar: {}, // settings for LoadingBar Quasar plugin
-    dialog: {}
-    // ..and many more
-  }
-})
-app.mount('#q-app')
+  app.use(Quasar, {
+    config: {
+      brand: {
+        // ... or all other brand colors
+      },
+      notify: {}, // default set of options for Notify Quasar plugin
+      loading: {}, // default set of options for Loading Quasar plugin
+      loadingBar: {}, // settings for LoadingBar Quasar plugin
+      dialog: {}
+      // ..and many more
+    }
+  })
+  app.mount('#q-app')
 </script>
 
 <style>
-.qbtn-success {
-  color: #28a745 !important;
-  border-color: #28a745 !important;
-}
+  .qbtn-success {
+    color: #28a745 !important;
+    border-color: #28a745 !important;
+  }
 
-.q-table__container .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
+  .q-table__container .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.qtabs .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
+  .qtabs .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.q-btn .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
+  .q-btn .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.qbtn-group .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
+  .qbtn-group .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.client-details .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
-
-
-.q-dialog-plugin .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
-
-.q-notifications .row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  /* Add your custom styles here */
-}
-
-.q-btn .col {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  /* Add your custom styles here */
-}
-
-.client-details .col {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  /* Add your custom styles here */
-}
+  .client-details .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
 
+  .q-dialog-plugin .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.sticky-header-table {
-  height: 70vh;
-}
+  .q-notifications .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.sticky-header-table .q-table__bottom {
-  background-color: #ffffff;
-  color: #4caf50;
-}
+  .q-btn .col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.sticky-header-table thead tr:first-child th {
-  background: #ffffff;
-  color: #4caf50;
-  top: 0;
-}
+  .client-details .col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    /* Add your custom styles here */
+  }
 
-.sticky-header-table .q-table__top {
-  background-color: #ffffff;
-  color: #4caf50;
-}
 
-.sticky-header-table thead tr th {
-  position: sticky;
-  z-index: 1;
-}
 
-.sticky-header-table tbody {
-  scroll-margin-top: 48px;
-}
+  .sticky-header-table {
+    height: 70vh;
+  }
 
-.sticky-header-table tbody .q-td {
-  border-color: #e0e0e0 !important;
-}
+  .sticky-header-table .q-table__bottom {
+    background-color: #ffffff;
+    color: #4caf50;
+  }
 
-.sticky-header-table tbody .q-tr:nth-child(odd) {
-  background-color: rgb(199, 230, 141);
-}
+  .sticky-header-table thead tr:first-child th {
+    background: #ffffff;
+    color: #4caf50;
+    top: 0;
+  }
 
-.sticky-header-table tbody .q-tr:nth-child(even) {
-  background-color: #eceff1;
-}
+  .sticky-header-table .q-table__top {
+    background-color: #ffffff;
+    color: #4caf50;
+  }
 
-.sticky-header-table tbody .q-tr:hover {
-  background-color: #ffc107;
-}
+  .sticky-header-table thead tr th {
+    position: sticky;
+    z-index: 1;
+  }
+
+  .sticky-header-table tbody {
+    scroll-margin-top: 48px;
+  }
+
+  .sticky-header-table tbody .q-td {
+    border-color: #e0e0e0 !important;
+  }
+
+  .sticky-header-table tbody .q-tr:nth-child(odd) {
+    /* background-color: #4caf50; */
+  }
+
+  .sticky-header-table tbody .q-tr:nth-child(even) {
+    background-color: #eceff1;
+  }
+
+  .sticky-header-table tbody .q-tr:hover {
+    /* background-color: #ffeb3b; */
+  }
 </style>
